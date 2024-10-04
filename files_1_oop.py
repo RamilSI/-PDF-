@@ -12,21 +12,36 @@
 входные переменные:
 direct - целевая папка где находятся файлы пдф
 """
+import os
+import shutil
+import re
+import fitz
 
 
 class Sert:
 
-    def __init__(self, patern, direct):  # инициализирую паттерн регулярного выражения и пути к нужному файлу
-        self.direct = direct
-        self.patern = patern
+    def __init__(self, root_path='/Users/admin/Library/CloudStorage/GoogleDrive-rml7771@gmail.com/Мой диск/scan/',
+                 dir_path='',
+                 path_new='/Users/admin/Library/CloudStorage/GoogleDrive-rml7771@gmail.com/Мой диск/scan/base_sert',
+                 pattern=r'№\s[0-9][0-9][0-9][0-9]'):  # инициализирую паттерн регулярного выражения и пути к нужному
+                                                       # файлу
+        self.root_path = root_path
+        self.dir_path = dir_path
+        self.pattern = pattern
+        self.path_new = path_new
+        self.__direct = root_path + dir_path
+        self.__spisok = os.listdir(self.root_path + self.dir_path)
+        for i, name in enumerate(os.listdir(self.__direct)):
+            print(i, name)
+
+    def get_spisok(self):
+        return self.__spisok
+        print(len(self.__spisok))
 
     def new_name(self):
-        import re
-        import fitz
-        import os
-        for i, line in enumerate(os.listdir(self.direct)):
+        for i, line in enumerate(os.listdir(self.__direct)):
             if line != '.DS_Store':
-                pdf_document = fitz.open(direct + line)
+                pdf_document = fitz.open(self.__direct + line)
                 text = ''
                 for page_num in range(pdf_document.page_count):
                     page = pdf_document[page_num]
@@ -34,30 +49,42 @@ class Sert:
                         text += page.get_text()
                     else:
                         print('текста нет на странице')
-                match = re.findall(r'№\s[0-9][0-9][0-9][0-9]', text)
+                match = re.findall(self.pattern, text)
                 pdf_document.close()
-                path_old = direct + line
+                path_old = self.__direct + line
                 print('Старое название', path_old)
-                path_new = direct + ' '.join(match) + '.pdf'
+                path_new = self.__direct + ' '.join(match) + '.pdf'
                 print('Новое название', path_new)
                 print('\n', f'------КОНЕЦ {i} страницы -------', '\n')
                 try:
                     os.rename(path_old, path_new)
                 except FileNotFoundError:
-                  print("Ошибка: Файл не найден")
+                    print("Ошибка: Файл не найден")
                 except PermissionError:
                     print("Нет доступа для переименования файла")
 
-    def list_sert(self):
-        import os
-        for i, name in enumerate(os.listdir(self.direct)):
-            print(i, name)
+    def new_root(self):
+        for i, file in enumerate(os.listdir(self.__direct)):
+            if file != '.DS_Store':
+                path_current = self.root_path + self.dir_path + file
+                if file not in (os.listdir(self.path_new)):
+                    print(f'номер строки: {i} - файл - {file}')
+                    shutil.move(path_current, self.path_new)
+                else:
+                    print('файл уже присутствует!', file )
+            else:
+                print(file)
+                os.remove(self.root_path+self.dir_path+file)
+
+        os.rmdir(self.root_path + self.dir_path)
 
 
 if __name__ == '__main__':
-    pattern = 'Партия\s№\s[0-9]+'
-    direct = '/Users/admin/Library/CloudStorage/GoogleDrive-rml7771@gmail.com/Мой диск/scan/07.08.24/'
-    sert_1 = Sert(pattern, direct)
 
+    sert_1 = Sert(dir_path='19.07.24/')
+    #
+    sert_1.get_spisok()
     sert_1.new_name()
-    sert_1.list_sert()
+
+    # sert_2 = Sert(root_path= '/Users/admin/PycharmProjects/files/платежи_кайт/')
+    # sert_1.new_root()
