@@ -30,13 +30,11 @@ class Sert:
         self.pattern = pattern
         self.path_new = path_new
         self.__direct = root_path + dir_path
-        self.__spisok = os.listdir(self.root_path + self.dir_path)
+        self.files = os.listdir(root_path + dir_path)
         for i, name in enumerate(os.listdir(self.__direct)):
             print(i, name)
-
-    def get_spisok(self):
-        return self.__spisok
-        print(len(self.__spisok))
+        print(os.listdir(self.root_path + self.dir_path))
+        print('длина списка', len(self.files))
 
     def new_name(self):
         for i, line in enumerate(os.listdir(self.__direct)):
@@ -58,6 +56,7 @@ class Sert:
                 print('\n', f'------КОНЕЦ {i} страницы -------', '\n')
                 try:
                     os.rename(path_old, path_new)
+                    print(self.files)
                 except FileNotFoundError:
                     print("Ошибка: Файл не найден")
                 except PermissionError:
@@ -81,10 +80,6 @@ class Sert:
 
 if __name__ == '__main__':
 
-    sert_1 = Sert(dir_path='19.07.24/')
-    #
-    sert_1.get_spisok()
+    sert_1 = Sert(dir_path='2024-11-03 серт/')
     sert_1.new_name()
-
-    # sert_2 = Sert(root_path= '/Users/admin/PycharmProjects/files/платежи_кайт/')
     # sert_1.new_root()

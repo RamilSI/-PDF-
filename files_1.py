@@ -1,52 +1,55 @@
-# программа обхода имен(файлов) в папке и внутри нее
-# импортирую нужные библиотеки
 """
+1. передаю путь к целевой папке
+2. сохраняю список файлов
+3. создаю переменную для сохранения текста
+4. проверяю название файла на не равенcтво . DC_Store
+5. извлекаю весь текст файла
+6. по шаблону '№\s[0-9][0-9][0-9][0-9]' ищу нужное совпадение (записать проверку наличия)
+7. переименовываю на новое название
+
+программа обхода имен(файлов) в папке и внутри нее поиска значений
 входные переменные:
-1. direct - целевая папка где находятся файлы пдф
-2.
+direct - целевая папка где находятся файлы пдф
 """
-
-
-
 
 import os
 import re
 import fitz
 
-
-direct = '/Users/admin/Library/CloudStorage/GoogleDrive-rml7771@gmail.com/Мой диск/scan/2024-06-18 +/'
+direct = '/Users/admin/Library/CloudStorage/GoogleDrive-rml7771@gmail.com/Мой диск/scan/2024-10-06 6.10.24' + '/'
 files = os.listdir(direct)
 print(files)
-
-file_str = []
 for i, line in enumerate(files):
     print('Текущее название: ', line)
     if line != '.DS_Store':
-        filename = fitz.open(direct + line)
-        pdf_document = fitz.open(filename)
+        pdf_document = fitz.open(direct + line)
         text = ''
         for page_num in range(pdf_document.page_count):
             page = pdf_document[page_num]
-            text += page.get_text()
-        match1 = re.findall(r'Партия\s№\s[0-9]+', text)
-        match2 = re.findall(r'№\s[0-9][0-9][0-9][0-9]', text)
-        pdf_document.close()
-        print('Новое название: ', ' '.join(match2[0:2]))
-        file_str.append(match2)
-        path_old = direct + line
-        print('Старое название', path_old)
-        path_new = direct + ' '.join(match2[0:2]) + '.pdf'
-        print('Новое название', path_old)
-        print('\n', f'------КОНЕЦ {i} страницы -------', '\n')
-        try:
-            os.rename(path_old, path_new)
-        except FileNotFoundError:
-            print("Ошибка: Файл не найден")
-        except PermissionError:
-            print("Нет доступа для переименования файла")
+            if page.get_text() != '':
+                text += page.get_text()
+                print('на странице есть текст: ')
+                match = re.findall(r'№\s[0-9][0-9][0-9][0-9]', text)
+                pdf_document.close()
+                print(f'Список имен: {match} кол-во элементов: {len(match)}')
+                if len(match) == 0:
+                    print(text)
+                print('Новое название: ', ' '.join(match))
+                path_old = direct + line
+                print('Старое название', path_old)
+                path_new = direct + ' '.join(match) + '.pdf'
+                print('Новое название', path_new)
+                print('\n', f'------КОНЕЦ {i} страницы -------', '\n')
+                try:
+                    os.rename(path_old, path_new)
+                except FileNotFoundError:
+                    print("Ошибка: Файл не найден")
+                except PermissionError:
+                    print("Нет доступа для переименования файла")
+            else:
+                print('текста нет на странице')
 
-q = '/Users/admin/Library/CloudStorage/GoogleDrive-rml7771@gmail.com/Мой диск/scan/07 авг 2024/07 авг 2024 002.pdf'
-w = '/Users/admin/Library/CloudStorage/GoogleDrive-rml7771@gmail.com/Мой диск/scan/07 авг 2024/07 авг 2024 002.pdf'
+
 
 
 
