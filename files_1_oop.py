@@ -23,7 +23,7 @@ class Sert:
     def __init__(self, root_path='/Users/admin/Library/CloudStorage/GoogleDrive-rml7771@gmail.com/Мой диск/scan/',
                  dir_path='',
                  path_new='/Users/admin/Library/CloudStorage/GoogleDrive-rml7771@gmail.com/Мой диск/scan/base_sert',
-                 pattern=r'№\s[0-9][0-9][0-9][0-9]|Цвет\sRAL\s\d+'):  # паттерн регулярного выражения и пути к нужному файлу
+                 pattern=r'№\s[0-9][0-9][0-9][0-9]|Цвет\sRAL\s\d+|№\s\d+[/]\d+'):  # паттерн регулярного выражения и пути к нужному файлу
         self.root_path = root_path
         self.dir_path = dir_path
         self.pattern = pattern
@@ -34,6 +34,15 @@ class Sert:
             print(i, name)
         print("список файлов: ", os.listdir(self.root_path + self.dir_path))
         print('длина списка', len(self.files))
+
+    def sanitize_filename(self, name):
+        # Заменяем запрещённые символы на подчёркивания
+        cleaned = re.sub(r'[\\/*?:"<>|]', '_', name)
+        # Удаляем начальные/конечные пробелы и точки
+        cleaned = cleaned.strip(' .')
+        # Заменяем множественные пробелы на один
+        cleaned = re.sub(r'\s+', ' ', cleaned)
+        return cleaned
 
     def new_name(self):
         for i, line in enumerate(os.listdir(self.__direct)):
@@ -48,11 +57,19 @@ class Sert:
                         print('текста нет на странице')
                 match = re.findall(self.pattern, text)
                 pdf_document.close()
-                path_old = self.__direct + line
+                path_old = os.path.join(self.__direct, line)
+                # path_old = self.__direct + line
                 print('Старое название', path_old)
-                path_new = self.__direct + ' '.join(match) + '.pdf'
+
+                # В методе new_name измените формирование path_new:
+                match_str = ' '.join(match)
+                cleaned_name = self.sanitize_filename(match_str)
+                path_new = os.path.join(self.__direct, f"{cleaned_name}.pdf")
+
+                # path_new = self.__direct + ' '.join(match) + '.pdf'
                 print('Новое название', path_new)
                 print('\n', f'------КОНЕЦ {i} страницы -------', '\n')
+
                 try:
                     os.rename(path_old, path_new)
                     print(self.files)
@@ -79,6 +96,6 @@ class Sert:
 
 if __name__ == '__main__':
 
-    sert_1 = Sert(dir_path='2025-01-23 сканысерты/')
+    sert_1 = Sert(dir_path='new/')
     sert_1.new_name()
     sert_1.new_root()
