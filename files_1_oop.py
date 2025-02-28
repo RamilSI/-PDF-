@@ -23,7 +23,7 @@ class Sert:
     def __init__(self, root_path='/Users/admin/Library/CloudStorage/GoogleDrive-rml7771@gmail.com/Мой диск/scan/',
                  dir_path='',
                  path_new='/Users/admin/Library/CloudStorage/GoogleDrive-rml7771@gmail.com/Мой диск/scan/base_sert',
-                 pattern=r'№\s[0-9][0-9][0-9][0-9]'):  # паттерн регулярного выражения и пути к нужному файлу
+                 pattern=r'№\s[0-9][0-9][0-9][0-9]|Цвет\sRAL\s\d+'):  # паттерн регулярного выражения и пути к нужному файлу
         self.root_path = root_path
         self.dir_path = dir_path
         self.pattern = pattern
@@ -32,7 +32,7 @@ class Sert:
         self.files = os.listdir(root_path + dir_path)
         for i, name in enumerate(os.listdir(self.__direct)):
             print(i, name)
-        print(os.listdir(self.root_path + self.dir_path))
+        print("список файлов: ", os.listdir(self.root_path + self.dir_path))
         print('длина списка', len(self.files))
 
     def new_name(self):
@@ -79,6 +79,6 @@ class Sert:
 
 if __name__ == '__main__':
 
-    sert_1 = Sert(dir_path='2024-11-03 серт/')
+    sert_1 = Sert(dir_path='2025-01-23 сканысерты/')
     sert_1.new_name()
     sert_1.new_root()

@@ -62,6 +62,7 @@ png_document_1 = pytesseract.image_to_string(Image.open(file_path_1))
 
 print(png_document_1)
 
-pdf = pytesseract.image_to_pdf_or_hocr('/Users/admin/Library/CloudStorage/GoogleDrive-rml7771@gmail.com/Мой диск/scan/2024-10-04 1.10.24 — jpg_копия/№ 5600.png', extension='pdf')
+pdf = pytesseract.image_to_pdf_or_hocr('/Users/admin/Library/CloudStorage/GoogleDrive-rml7771@gmail.com/Мой диск/scan/'
+                                       '2024-10-04 1.10.24 — jpg_копия/№ 5600.png', extension='pdf')
 with open('test.pdf', 'w+b') as f:
     f.write(pdf) # pdf type is bytes by default

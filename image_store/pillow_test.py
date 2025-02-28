@@ -8,19 +8,15 @@ print(p1.mode)
 print(p1.format)
 print(p1.info)
 p1.show()
-# ava = p1.crop((660, 650, 1850, 750))
-# ava = ava.transpose(Image.Transpose.ROTATE_180)
-# ava.save(SOURSE_DIR + 'ava.jpeg')
-# ava.show()
-# p1.paste(ava, (500, 600))
-# p1.show()
-p2 = Image.open(SOURSE_DIR + '6.10.24 002.jpg')
 
+p2 = Image.open(SOURSE_DIR + 'copy_.png')
+p2.show()
 
-im = Image.open(SOURSE_DIR + '6.10.24 001.jpg')
-box = Image.open(SOURSE_DIR + 'pechat.png')
-im.paste(box, (1200, 2000))
+x, y = p1.size
 
-im.draft("L", (100, 100))
-print("draft =", im.mode, im.size)
-im.show()
+p1.paste(p2, (int(x/2), int(y-500)))
+p1.show()
+
+# im.draft("L", (100, 100))
+# print("draft =", im.mode, im.size)
+# im.show()
