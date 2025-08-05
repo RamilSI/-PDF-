@@ -22,7 +22,8 @@ class Sert:
 
     def __init__(self, root_path='/Users/admin/Library/CloudStorage/GoogleDrive-rml7771@gmail.com/Мой диск/scan/',
                  dir_path='',
-                 path_new='/Users/admin/Library/CloudStorage/GoogleDrive-rml7771@gmail.com/Мой диск/scan/base_sert',
+                 path_new=''
+                          '',
                  pattern=r'№\s[0-9][0-9][0-9][0-9]|Цвет\sRAL\s\d+|№\s\d+[/]\d+'):  # паттерн регулярного выражения и пути к нужному файлу
         self.root_path = root_path
         self.dir_path = dir_path
