@@ -35,11 +35,10 @@ class PDFProcessor:
     def __init__(self, pattern):
         self.pattern = re.compile(pattern)
 
-    def extract_text(self, file_path) -> list:
+    def extract_text(self, file_path) -> str:
         """Извлекает текст из PDF"""
         with fitz.open(file_path) as doc:
-            print(doc)
-            return "".join(page.get_text for page in doc if page.get_text())
+            return "".join(page.get_text() for page in doc if page.get_text())
 
     def find_matches(self, text):
         """Ищет совпадения по паттерну"""
@@ -85,8 +84,8 @@ class SertificateProcessor:
             matches = self.pdf_processor.find_matches(text)
             print(f' new name file: {matches}')
 
-        #  формируем новое имя
-            clean_name = self.sanitize_filename(' '.join(matches))
+            # Формируем новое имя
+            clean_name = self.rename.sanitize(' '.join(matches))  # Исправлено здесь
             dest_path = os.path.join(self.dest_dir, f'{clean_name}.pdf')
 
         #     переименование
