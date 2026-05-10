@@ -15,3 +15,22 @@ __pycache__/
 
 # Ваше venv
 pdf_python/venv/
+
+# Виртуальное окружение
+venv/
+.env
+__pycache__/
+*.pyc
+
+# IDE
+/.idea/
+
+# macOS
+.DS_Store
+
+# Логи
+*.log
+
+# Папки с зависимостями
+pdf_python/venv/
+files/
