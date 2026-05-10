@@ -85,6 +85,14 @@ class SertificateProcessor:
             matches = self.pdf_processor.find_matches(text)
             print(f' new name file: {matches}')
 
+            # Проверяем, что matches не пустой
+            if not matches:
+                print("Внимание - пустой файл!")
+                user_input = input("Хотите продолжить выполнение программы? (Y/N): ").strip().lower()
+                if user_input != 'y':
+                    print("Программа остановлена пользователем.")
+                    return  # Останавливаем выполнение программы
+
             # Формируем новое имя
             clean_name = self.rename.sanitize(' '.join(matches))  # Исправлено здесь
             dest_path = os.path.join(self.dest_dir, f'{clean_name}.pdf')
